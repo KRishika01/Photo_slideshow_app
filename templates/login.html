@@ -21,23 +21,16 @@
                         <br>
                         <input type="password" id="password" name="password" size="30" style="font-size: 20px; border-radius: 12px;" required>
                         <br><br>
-                        <label for=""><input type="checkbox" style="transform: scale(1.5); margin-bottom: 20px;">  Remember me</label>
-                        <br>
                     <button type="submit" style="font-size: 30px; cursor: pointer;font-family:'Playfair Display'" >Login</button>
-                </form><br>
-                <a href="#">Forget Password??</a>
+                </form>
                 <p>Don't have an account?? <a href="#" onclick="redirectToSignup()">Sign Up here</a></p>
         </div>
         
         <script src="{{ url_for('static', filename='script.js') }}"></script>
-        <!-- {% if alert %}
+    
         <script>
-            alert("Invalid username or password. Please try again.");
-        </script>
-        {% endif %} -->
-        <script>
-             const urlParams = new URLSearchParams(window.location.search);
-             const message = urlParams.get('message');
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
 
         // Display appropriate alert based on the message parameter
         if (message === 'success') {
@@ -45,7 +38,6 @@
         } else if (message === 'error') {
             alert('Invalid username or password');
         }
-
         </script>
 
     </body>

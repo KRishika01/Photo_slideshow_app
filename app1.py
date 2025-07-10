@@ -90,8 +90,6 @@ def upload():
         return redirect(url_for('login'))
 
 
-
-
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
@@ -113,17 +111,31 @@ def resize_image(image_path, output_path, new_dimensions):
     - new_dimensions: Tuple (width, height) of the new dimensions.
     """
     image = Image.open(image_path)
+    if image.mode == 'RGBA':
+        image = image.convert('RGB')
     resized_image = image.resize(new_dimensions)
-    resized_image.save(output_path)
+    resized_image.save(output_path,format='JPEG')
 
 def get_image_dimensions(image_path):
     with Image.open(image_path) as img:
         width, height = img.size
     return width, height
 
+# def save_image(image_blob, image_path):
+#     with open(image_path, 'wb') as file:
+#         file.write(image_blob)
+
 def save_image(image_blob, image_path):
-    with open(image_path, 'wb') as file:
-        file.write(image_blob)
+    from PIL import Image
+    from io import BytesIO
+
+    img = Image.open(BytesIO(image_blob))
+
+    if img.mode == 'RGBA':
+        img = img.convert('RGB')
+
+    img.save(image_path, format='JPEG')
+
 
 def download_image(image_url, image_path):
     response = request.get(image_url, stream=True)
@@ -260,6 +272,7 @@ def page3():
 def page4():
     return render_template('page4.html')
 
+# THIS IS TO VIEW ALL THE PHOTOS THAT WE UPLOAD EITHER USING DRAG & DROP OR BROWSE
 @app.route('/view_photos', methods=['GET'])
 def view_photos():
     if 'id' in session:
@@ -273,6 +286,7 @@ def view_photos():
         flash('User not logged in', 'error')
         return redirect(url_for('login'))
     
+# THIS IS TO VIEW THE PHOTOS THAT WE SELECT FOR CREATING VIDEO
 @app.route('/view_my_photos', methods=['GET'])
 def view_my_photos():
     if 'id' in session:
@@ -474,8 +488,6 @@ def logout():
     session.clear()
     flash('Logout successful', 'success')
     return redirect(url_for('login'))
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
